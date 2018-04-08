@@ -40,7 +40,6 @@ import com.chad.library.adapter.base.animation.SlideInLeftAnimation;
 import com.chad.library.adapter.base.animation.SlideInRightAnimation;
 import com.chad.library.adapter.base.animation.SlideInTopAnimation;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
-import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -63,7 +62,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
     private boolean mNextLoadEnable = false;
     private boolean mLoadMoreEnable = false;
     private boolean mLoading = false;
-    private LoadMoreView mLoadMoreView = new SimpleLoadMoreView();
+    private LoadMoreView mLoadMoreView = null;
     private RequestLoadMoreListener mRequestLoadMoreListener;
     private boolean mEnableLoadMoreEndClick = false;
 
@@ -127,9 +126,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
         mRecyclerView = recyclerView;
     }
 
-    private void checkNotNull() {
-        if (getRecyclerView() == null) {
-            throw new RuntimeException("please bind recyclerView first!");
+    private void checkNotNull(Object object, String paramName) {
+        if (object == null) {
+            throw new RuntimeException(paramName + " is null");
         }
     }
 
@@ -164,7 +163,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
      * @see #disableLoadMoreIfNotFullPage(RecyclerView)
      */
     public void disableLoadMoreIfNotFullPage() {
-        checkNotNull();
+        checkNotNull(getRecyclerView(), "RecyclerView");
         disableLoadMoreIfNotFullPage(getRecyclerView());
     }
 
@@ -294,7 +293,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
      * @return 0 or 1
      */
     public int getLoadMoreViewCount() {
-        if (mRequestLoadMoreListener == null || !mLoadMoreEnable) {
+        if (mRequestLoadMoreListener == null || !mLoadMoreEnable || mLoadMoreView == null) {
             return 0;
         }
         if (!mNextLoadEnable && mLoadMoreView.isLoadEndMoreGone()) {
@@ -441,7 +440,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
      */
     public void setNewData(@Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
-        if (mRequestLoadMoreListener != null) {
+        if (mRequestLoadMoreListener != null && mLoadMoreView != null) {
             mNextLoadEnable = true;
             mLoadMoreEnable = true;
             mLoading = false;
@@ -630,6 +629,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
     }
 
     private VH getLoadingView(ViewGroup parent) {
+        checkNotNull(mLoadMoreView, "LoadMoreView");
         View view = getItemView(mLoadMoreView.getLayoutId(), parent);
         VH holder = createBaseViewHolder(view);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -650,6 +650,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
      * The notification starts the callback and loads more
      */
     public void notifyLoadMoreToLoading() {
+        checkNotNull(mLoadMoreView, "LoadMoreView");
         if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOADING) {
             return;
         }
@@ -777,6 +778,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
                 convert(holder, getItem(position));
                 break;
             case LOADING_VIEW:
+                checkNotNull(mLoadMoreView, "LoadMoreView");
                 mLoadMoreView.convert(holder);
                 break;
             case EMPTY_VIEW:
@@ -925,7 +927,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
      * @see #bindToRecyclerView(RecyclerView)
      */
     public void setEmptyView(int layoutResId) {
-        checkNotNull();
+        checkNotNull(getRecyclerView(), "RecyclerView");
         setEmptyView(layoutResId, getRecyclerView());
     }
 
@@ -1123,7 +1125,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder> extends 
      */
     @Nullable
     public View getViewByPosition(int position, @IdRes int viewId) {
-        checkNotNull();
+        checkNotNull(getRecyclerView(), "RecyclerView");
         return getViewByPosition(getRecyclerView(), position, viewId);
     }
 

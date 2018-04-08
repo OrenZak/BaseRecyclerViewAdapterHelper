@@ -3,7 +3,7 @@ package com.chad.library.adapter.base.loadmore;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseRecyclerAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 /**
@@ -83,7 +83,7 @@ public abstract class LoadMoreView {
      * No more data is hidden
      *
      * @return true for no more data hidden load more
-     * @deprecated Use {@link BaseQuickAdapter#loadMoreEnd(boolean)} instead.
+     * @deprecated Use {@link BaseRecyclerAdapter#loadMoreEnd(boolean)} instead.
      */
     @Deprecated
     public boolean isLoadEndGone() {

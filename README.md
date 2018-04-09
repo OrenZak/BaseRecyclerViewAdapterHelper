@@ -17,18 +17,6 @@ kotlin demo :[BRVAH_kotlin](https://github.com/AllenCoder/BRVAH_kotlin)
 
 [国内下载地址](https://fir.im/s91g)  
 
-# proguard-rules.pro
-```
--keep class com.chad.library.adapter.** {
-*;
-}
--keep public class * extends com.chad.library.adapter.base.BaseRecyclerAdapter
--keep public class * extends com.chad.library.adapter.base.BaseViewHolder
--keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
-     <init>(...);
-}
-```
-
 # Extension library
 [PinnedSectionItemDecoration](https://github.com/oubowu/PinnedSectionItemDecoration)  
 [EasyRefreshLayout](https://github.com/anzaizai/EasyRefreshLayout)  

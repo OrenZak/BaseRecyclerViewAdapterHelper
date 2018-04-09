@@ -12,6 +12,9 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
+-keep class com.chad.library.adapter.** {
+*;
+}
 -keep public class * extends com.chad.library.adapter.base.BaseRecyclerAdapter
 -keep public class * extends com.chad.library.adapter.base.BaseViewHolder
 -keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
